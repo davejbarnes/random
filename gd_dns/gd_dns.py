@@ -6,6 +6,7 @@ import gd_dns_config as config
 godaddy_headers = {"Authorization":" sso-key " + config.godaddy_key + ":" + config.godaddy_secret}
 
 def get_current_record(domain: str, record_name: str, record_type: str = "A") -> [str, bool]:
+    """Attempts to find the current data for a DNS record, returns the data or error code and bool indicating success"""
     req = requests.get(config.godaddy_apiurl 
                         + domain + "/records/" + record_type + "/" + record_name,
                         headers=godaddy_headers)
@@ -19,12 +20,14 @@ def get_current_record(domain: str, record_name: str, record_type: str = "A") ->
 
 
 def get_currentip() -> str:
+    """Returns the current apparent external IP of the host running this"""
     req = requests.get("http://ipinfo.io/json")
     ip = req.json()["ip"]
     return ip
 
 
 def set_record(domain: str, record_name: str, record_type: str, data: str) -> bool:
+    """Sets the data for a record given the domain and record name and type, returns a bool indicating success"""
     content = [{"data": data, "name": record_name, "ttl": 36000, "type": record_type}]
     req = requests.put(config.godaddy_apiurl 
                         + domain + "/records/" + record_type + "/" + record_name,
