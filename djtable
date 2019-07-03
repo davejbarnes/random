@@ -124,7 +124,7 @@ def draw_data_row(chars, values, widths, id):
     cols = len(widths)
     err_line = ""
     if cols != len(values):
-        err_line = "line " + str(id) +"; Wrong number of columns ; got " + str(len(values)) + ", expected " + str(cols) + "; Values " + str(values)
+        err_line = str(id) +";Columns: got " + str(len(values)) + ", expected " + str(cols) + ";" + str(values)
     else:
         out_line = chars[0]
         for col in range(cols):
@@ -203,11 +203,11 @@ def draw_table(data, header_style = "boldlight", row_style = 'light',
     if footer_style == 'none':
         draw_row(table_end[end_style], field_widths)
     if len(errors) > 0 and not no_errors:
-        tbl_errors = str("")
+        tbl_errors = "line;error;data\n"
         for error in errors:
             # print(error)
             tbl_errors += error + "\n"
-        draw_table(data = tbl_errors, header_style="none")
+        draw_table(data = tbl_errors, header_style="roundlight")
 
 
 # fake = "id;state;host_name;service_description;service_alert\n"
