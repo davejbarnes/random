@@ -232,12 +232,15 @@ def parse_args():
     noerrors = False
     fascii = force_ascii
 
+    for arg in arguments:
+        if arg in ["--ascii", "-a", "a"]:
+            fascii = True
+
     for index, arg in enumerate(arguments):
         if index == 0:
             continue
 
-        if arg == "--ascii":
-            fascii = True
+        if arg in ["--ascii", "-a", "a"]:
             continue
 
         if fascii:
