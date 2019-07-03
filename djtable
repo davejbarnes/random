@@ -24,7 +24,6 @@ import sys, select
 
 force_ascii = False
 if sys.version[0] == "2":
-    print("Python v2")
     force_ascii = True
 
 #Headers:
