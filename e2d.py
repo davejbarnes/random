@@ -2,7 +2,7 @@
 
 import sys, select, re
 from datetime import datetime
-epoch_regex = "[0-9]{10}"
+epoch_regex = "(?:\b|\D)([0-9]{10})(?:\b|\D)"
 rawdata = ""
 if select.select([sys.stdin,],[],[],0.0)[0]:
     for line in sys.stdin:
