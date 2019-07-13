@@ -14,22 +14,22 @@ last_rpm="Unknown"
 broken=False
 for line in sys.stdin:
     line=line.replace("\n", "")
-    while line.count("  "):
-        line=line.replace("  ", " ")
+    while line.count("  "): # yum output is space aligned
+        line=line.replace("  ", " ")  # reduce all that space to just one
     vals=line.split(" ")
-    if len(vals)==1: # found a split line, remember the package
-        last_rpm=vals[0]
-        continue
-    if vals[0]=='' and len(vals)==3: # found a continuation, use remembered package
-        vals[0]=last_rpm
+    if len(vals)==1: # found a split line... 
+        last_rpm=vals[0] # ...remember the package...
+        continue # ... and move on to the next line which should be a continuation
+    if vals[0]=='' and len(vals)==3: # found a continuation...
+        vals[0]=last_rpm # ...use remembered package
         last_rpm="Unknown" # Avoid re-using remembered package
-    outline=""
+    outline="" # make sure our output is empty
     for val in vals:
-        outline=outline+val + ","
-        if outline.count("Unknown") > 0:
-            broken=True
+        outline=outline+val + "," # make a line of the CSV
+    if outline.count("Unknown") > 0: # has something gone wrong?
+        broken=True
     if not broken:
-        outline=outline[0:-1]
+        outline=outline[0:-1] # get rid of trailing ,
         print(outline)
     else:
         print("Unable to process input")
