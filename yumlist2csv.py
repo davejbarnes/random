@@ -20,7 +20,7 @@ for line in sys.stdin:
     if len(vals)==1: # found a split line, remember the package
         last_rpm=vals[0]
         continue
-    if vals[0]=='': # found a continuation, use remembered package
+    if vals[0]=='' and len(vals)==3: # found a continuation, use remembered package
         vals[0]=last_rpm
         last_rpm="Unknown" # Avoid re-using remembered package
     outline=""
