@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # coding: utf-8
 
-import sys, select
+import fileinput, sys
 
 # definitions of character sets for drawing tables
 #  Dictionary of strings of characters, indexed as such:
@@ -240,6 +240,9 @@ def parse_args():
         if index == 0:
             continue
 
+        if arg == "-":
+            continue
+
         if arg in ["--ascii", "-a", "a"]:
             continue
 
@@ -334,11 +337,13 @@ if len(error_list) > 0:
 
 
 rawdata = ""
-if select.select([sys.stdin,],[],[],0.0)[0]:
-    for line in sys.stdin:
+print(fileinput.input('-').lineno())
+with fileinput.input('-') as lines:
+    for line in lines:
         rawdata += line
-else:
-    print("No input")
+
+if rawdata == "":
+    print("No input - expected input on stdin")
     exit(1)
 
 draw_table(data = rawdata, header_style=opt_header_style, row_style=opt_row_style,
