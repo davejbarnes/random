@@ -34,7 +34,7 @@ This is a Python 3 module which does all the heavy lifting for processing and va
 #   }
 ```
 
-I'll get around to writing proper docs for it, but if you're familiar with Python it hopefully makes sense when you read the code.  I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;)
+I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;). There's a **readme.md** in that repo, but if you're familiar with Python it hopefully makes sense when you read the code.
 
 ##### djtable
 I wrote this because I wanted an easy way to display CSV data in a terminal as a table.  It takes input from STDIN and tries to display the data as a table.  Arguments allow you to specify the delimiter, whether to make the first row a header, the last row a footer and also the style.  A minimum and maximum number of rows needed to determine the maximum column widths have defaults but can also be specified.
