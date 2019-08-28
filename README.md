@@ -37,6 +37,27 @@ This is a Python 3 module which does all the heavy lifting for processing and va
 I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;). There's a **readme.md** in that repo, but if you're familiar with Python it hopefully makes sense when you read the code.
 
 ##### djtable
-I wrote this because I wanted an easy way to display CSV data in a terminal as a table.  It takes input from STDIN and tries to display the data as a table.  Arguments allow you to specify the delimiter, whether to make the first row a header, the last row a footer and also the style.  A minimum and maximum number of rows needed to determine the maximum column widths have defaults but can also be specified.
+I wrote this because I wanted an easy way to display CSV data in a terminal as a table.  It takes input from STDIN and tries to display the data as a table.  Arguments allow you to specify the delimiter, whether to make the first row a header, the last row a footer and also the style.  A minimum and maximum number of rows needed to determine the maximum column widths have defaults but can also be specified
+```-d=<delim>, d=<delim>   delimter to use for columns in each line; default is ;
+
+-h, h                   first data line contains column header names, use default round style
+-h=style, h=style       first data line contains column header names, use specified style
+
+-f, f                   last data line contains footer data, use default round style
+-f=style, f=style       last data line contains footer data, use specified style
+
+-r=<style>, r=<style>   row style, default light
+
+-t=<style>, t=<style>   top style when no header specified, default round
+
+-e=<style>, e=<style>   end style when no footer specified, default round
+
+--ascii, -a a           draw all table elements using simple ascii
+
+--noerrors, -n, n       don't report data input errors
+```
+'style' can be 'light', 'bold', 'round' or 'ascii', depending on the table part (eg. a row can't be 'round')
+
+It works with Python 2, so it could probably be better (my original version was for Python 3, but I only had Python 2 where I wanted to use it).
 
 *to be continued*
