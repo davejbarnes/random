@@ -6,7 +6,7 @@ This repo has some of the scripts that I write.  I share them for anyone to:
 * Sigh / laugh at (Note - please let me know if there's a much easier way to so something)
 
 ### So far...
-##### djargs
+#### djargs
 This is a Python 3 module which does all the heavy lifting for processing and validating command line arguments.  It uses a configuration file to define the allowed arguments and rules to apply to them.
 
 **Excerpt from the config file** shows the available properties of defined arguments:
@@ -36,7 +36,7 @@ This is a Python 3 module which does all the heavy lifting for processing and va
 
 I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;). There's a **readme.md** in that repo, but if you're familiar with Python it hopefully makes sense when you read the code.
 
-##### djtable
+#### djtable
 I wrote this because I wanted an easy way to display CSV data in a terminal as a table.  It takes input from STDIN and tries to display the data as a table.  Arguments allow you to specify the delimiter, whether to make the first row a header, the last row a footer and also the style.  A minimum and maximum number of rows needed to determine the maximum column widths have defaults but can also be specified
 ```-d=<delim>, d=<delim>   delimter to use for columns in each line; default is ;
 
@@ -60,7 +60,7 @@ I wrote this because I wanted an easy way to display CSV data in a terminal as a
 
 It works with Python 2, so it could probably be better (my original version was for Python 3, but I only had Python 2 where I wanted to use it).
 
-**Examples**
+*Examples*
 ```
 └─ᗒ cat example-data.txt | djtable 
 ╭────┬──────┬───────────┬────────────────────┬─────────────────────────────────────────────╮
@@ -96,6 +96,26 @@ It works with Python 2, so it could probably be better (my original version was 
 |145 |2     |dc01-web02 |uptime_status       |CRIT: Host uptime is 0:50 and some more info |
 |145 |2     |dc01-web02 |                    |CRIT: Host uptime is 0:50 and some more info |
 +----+------+-----------+--------------------+---------------------------------------------+
+```
+
+#### e2d
+e2d is 'epoch to date'; it's for converting Unix timestamps in a log files or such and displaying them as a date and time string. It takes input from STDIN and finds any 10 digit integer and replaces it with a date and time string, and outputting each line.
+
+*Example*
+```
+└─ᗒ cat testdata.log 
+1232343567,some log line with valid date,user 1,2
+1232343667,some other line with valid date,user 2,2
+12323437677,some other with invalid date; log lines,user,2
+1232343767,some log line with valid date,user 5,2
+1232343,some log line with invalid date,user,2
+
+└─ᗒ cat testdata.log | e2d
+2009-01-19 05:39:27,some log line with valid date,user 1,2
+2009-01-19 05:41:07,some other line with valid date,user 2,2
+12323437677,some other with invalid date; log lines,user,2
+2009-01-19 05:42:47,some log line with valid date,user 5,2
+1232343,some log line with invalid date,user,2
 ```
 
 
