@@ -37,7 +37,9 @@ This is a Python 3 module which does all the heavy lifting for processing and va
 I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;). There's a **readme.md** in that repo, but if you're familiar with Python it hopefully makes sense when you read the code.
 
 #### djtable
-I wrote this because I wanted an easy way to display CSV data in a terminal as a table.  It takes input from STDIN and tries to display the data as a table.  Arguments allow you to specify the delimiter, whether to make the first row a header, the last row a footer and also the style.  A minimum and maximum number of rows needed to determine the maximum column widths have defaults but can also be specified
+I wrote this because I wanted an easy way to display CSV data in a terminal as a table.  It takes input from STDIN and tries to display the data as a table.  Arguments allow you to specify the delimiter, whether to make the first row a header, the last row a footer and also the style.  
+
+**Note** This script reads the entire input into memory - it will ~~probably~~ cause 'issues' if you feed it too much; it's intended to display a 'sensible' amount of data, not an entire 2GB log file.
 ```-d=<delim>, d=<delim>   delimter to use for columns in each line; default is ;
 
 -h, h                   first data line contains column header names, use default round style
@@ -117,6 +119,17 @@ e2d is 'epoch to date'; it's for converting Unix timestamps in a log files or su
 2009-01-19 05:42:47,some log line with valid date,user 5,2
 1232343,some log line with invalid date,user,2
 ```
+
+#### wsv.py
+wsv.py is "what seperated values". It tries to work out what the delimiter is in cvs type file when it's not known. It takes input from STDIN, and has a minimum and maximum number of lines to look at to come up with an answer, or not.
+
+This is a work in progress, and will only work where the input data has a consistent number of fields for the sample size, nor will it respect a delimiter in a quoted string.  Using the same 'testdata.log' file from above, it does this
+```
+└─ᗒ cat testdata.log | ./wsv.py 
+,
+```
+
+
 
 
 *to be continued*
