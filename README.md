@@ -34,7 +34,7 @@ This is a Python 3 module which does all the heavy lifting for processing and va
 #   }
 ```
 
-I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;). There's a **readme.md** in that repo, but if you're familiar with Python it hopefully makes sense when you read the code.
+I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;). There's a **readme.md** in my pyngctl repo, but if you're familiar with Python it hopefully makes sense when you read the code.
 
 #### djtable
 I wrote this because I wanted an easy way to display CSV data in a terminal as a table.  It takes input from STDIN and tries to display the data as a table.  Arguments allow you to specify the delimiter, whether to make the first row a header, the last row a footer and also the style.  
@@ -101,7 +101,7 @@ It works with Python 2, so it could probably be better (my original version was 
 ```
 
 #### e2d
-e2d is 'epoch to date'; it's for converting Unix timestamps in a log files or such and displaying them as a date and time string. It takes input from STDIN and finds any 10 digit integer and replaces it with a date and time string, and outputting each line.
+e2d is 'epoch to date'; it's for converting Unix timestamps in log files or such and displaying them as a date and time string. It takes input from STDIN and any 10 digit integer gets replaced with a date and time string, and outputs the result of each line to STDOUT.
 
 *Example*
 ```
