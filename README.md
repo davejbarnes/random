@@ -60,4 +60,43 @@ I wrote this because I wanted an easy way to display CSV data in a terminal as a
 
 It works with Python 2, so it could probably be better (my original version was for Python 3, but I only had Python 2 where I wanted to use it).
 
+**Examples**
+```
+└─ᗒ cat example-data.txt | djtable 
+╭────┬──────┬───────────┬────────────────────┬─────────────────────────────────────────────╮
+│id  │state │host_name  │service_description │service_alert                                │
+│143 │2     │dc01-web01 │uptime_status       │CRIT: Host uptime is 0:30                    │
+│145 │2     │dc01-web02 │                    │CRIT: Host uptime is 0:50 and some more info │
+│146 │2     │dc03-web01 │uptime_status       │CRIT: Host uptime is 0:25                    │
+│149 │2     │dc03-web04 │uptime_status       │CRIT: Host uptime is 0:15                    │
+│145 │2     │dc01-web02 │uptime_status       │CRIT: Host uptime is 0:50 and some more info │
+│145 │2     │dc01-web02 │                    │CRIT: Host uptime is 0:50 and some more info │
+└────┴──────┴───────────┴────────────────────┴─────────────────────────────────────────────┘
+
+└─ᗒ cat example-data.txt | djtable -h
+╭────┬──────┬───────────┬────────────────────┬─────────────────────────────────────────────╮
+│id  │state │host_name  │service_description │service_alert                                │
+├────┼──────┼───────────┼────────────────────┼─────────────────────────────────────────────┤
+│143 │2     │dc01-web01 │uptime_status       │CRIT: Host uptime is 0:30                    │
+│145 │2     │dc01-web02 │                    │CRIT: Host uptime is 0:50 and some more info │
+│146 │2     │dc03-web01 │uptime_status       │CRIT: Host uptime is 0:25                    │
+│149 │2     │dc03-web04 │uptime_status       │CRIT: Host uptime is 0:15                    │
+│145 │2     │dc01-web02 │uptime_status       │CRIT: Host uptime is 0:50 and some more info │
+│145 │2     │dc01-web02 │                    │CRIT: Host uptime is 0:50 and some more info │
+╰────┴──────┴───────────┴────────────────────┴─────────────────────────────────────────────╯
+
+└─ᗒ cat example-data.txt | djtable -h -a
++----+------+-----------+--------------------+---------------------------------------------+
+|id  |state |host_name  |service_description |service_alert                                |
++----+------+-----------+--------------------+---------------------------------------------+
+|143 |2     |dc01-web01 |uptime_status       |CRIT: Host uptime is 0:30                    |
+|145 |2     |dc01-web02 |                    |CRIT: Host uptime is 0:50 and some more info |
+|146 |2     |dc03-web01 |uptime_status       |CRIT: Host uptime is 0:25                    |
+|149 |2     |dc03-web04 |uptime_status       |CRIT: Host uptime is 0:15                    |
+|145 |2     |dc01-web02 |uptime_status       |CRIT: Host uptime is 0:50 and some more info |
+|145 |2     |dc01-web02 |                    |CRIT: Host uptime is 0:50 and some more info |
++----+------+-----------+--------------------+---------------------------------------------+
+```
+
+
 *to be continued*
