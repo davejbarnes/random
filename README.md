@@ -7,7 +7,7 @@ This repo has some of the scripts that I write.  I share them for anyone to:
 
 ### So far...
 #### args2arr (demo)
-This is "args to array" in Bash - it parses command line aruments and provides 2 index matched arrays of all the arguments and all the values (if specified).  If you want to use it you just need the function 'parseArgs', the rest is just for demo or testing.
+This is "args to array" in Bash - it parses command line arguments and provides 2 index matched arrays of all the arguments and all the values (if specified).  If you want to use it you just need the function 'parseArgs', the rest is just for demo or testing.
 
 *Eample*
 ```
