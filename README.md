@@ -6,6 +6,19 @@ This repo has some of the scripts that I write.  I share them for anyone to:
 * Sigh / laugh at (Note - please let me know if there's a much easier way to so something)
 
 ### So far...
+#### args2arr (demo)
+This is "args to array" in Bash - it parses command line arguments and provides 2 index matched arrays of all the arguments and all the values (if specified).  If you want to use it you just need the function 'parseArgs', the rest is just for demo or testing.
+
+*Eample*
+```
+└─ᗒ ./args2arr -b=1 -c -d 44 -s='-Some more text' --douglas=42
+Arg -b, value 1
+Arg -c, value None_found
+Arg -d, value 44
+Arg -s, value -Some more text
+Arg --douglas, value 42
+```
+
 #### djargs
 This is a Python 3 module which does all the heavy lifting for processing and validating command line arguments.  It uses a configuration file to define the allowed arguments and rules to apply to them.
 
