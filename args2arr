@@ -1,0 +1,75 @@
+#!/bin/bash
+
+parseArgs(){
+  numArgs=1
+  arg[0]='Arguments'
+  value[0]='Values'
+  while [ "$1" != "" ]; do
+    if [ "${1:0:1}" == "-" ]; then
+      pos="${1%%=*}"
+      [[ "$pos" = "$1" ]] && eqpos=255 || eqpos="${#pos}"
+      if [ $eqpos -ne 255 ]; then
+        arg[$numArgs]=${1:0:$eqpos}
+        value[$numArgs]=${1:$(( $eqpos + 1 ))}
+        shift 1
+      elif [ "${2:0:1}" != "-" ] && [ "$2" != "" ]; then
+        arg[$numArgs]=$1
+        value[$numArgs]=$2
+        shift 2
+      else
+        arg[$numArgs]=$1
+        shift 1
+      fi
+    else
+      echo Unrecognised parameter $1
+      shift 1
+    fi
+    numArgs=$(( $numArgs + 1 ))
+  done
+  numArgs=$(( $numArgs - 1 ))
+}
+
+help(){
+cat << EOF
+
+args2arr example
+----------------
+
+Converts command line options to 2 'linked' arrays of parameter name
+and the value (if any) specified.  This demo outputs the parameters
+and their values if present. The execption is if you specify the first
+parameter as "--help" which displays this help.
+
+Use
+---
+
+Specify an argument (no value):
+  -p
+  --parameter
+
+Specify a parameter value:
+  -p 3
+  -p=3
+  -p "Long string"
+  -p="Long string"
+  --parameter 3
+  --parameter=3
+  --parameter "Long string"
+  --parameter="Long string"
+
+Note:
+  A parameter value starting with "-" must use the '-p=value' format, quoted as needed
+
+EOF
+}
+
+if [ "$1" == "--help" ]; then
+  help
+  exit 0
+fi
+
+parseArgs "$@"
+for i in $(seq 1 $numArgs); do
+  [[ ${value[$i]} != '' ]] && val=${value[$i]} || val='None_found'
+  echo Arg ${arg[$i]}, value $val
+done
