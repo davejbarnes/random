@@ -337,7 +337,6 @@ if len(error_list) > 0:
 
 
 rawdata = ""
-print(fileinput.input('-').lineno())
 with fileinput.input('-') as lines:
     for line in lines:
         rawdata += line
