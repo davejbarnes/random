@@ -18,6 +18,18 @@ Arg -d, value 44
 Arg -s, value -Some more text
 Arg --douglas, value 42
 ```
+Can accept multiple arguments as a string as such for -abc:
+```
+└─ᗒ ./args2arr -abc 5 -def=10 --long 99 -d 1 -t=2 --last=test
+Arg a, value None_found
+Arg b, value None_found
+Arg c, value 5
+Arg def, value 10
+Arg long, value 99
+Arg d, value 1
+Arg t, value 2
+Arg last, value test
+```
 
 #### djargs
 This is a Python 3 module which does all the heavy lifting for processing and validating command line arguments.  It uses a configuration file to define the allowed arguments and rules to apply to them.
