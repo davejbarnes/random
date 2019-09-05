@@ -1,5 +1,4 @@
 #!/bin/bash
-
 parseArgs(){
   numArgs=1
   arg[0]='Arguments'
@@ -9,19 +8,38 @@ parseArgs(){
       pos="${1%%=*}"
       [[ "$pos" = "$1" ]] && eqpos=255 || eqpos="${#pos}"
       if [ $eqpos -ne 255 ]; then
-        arg[$numArgs]=${1:0:$eqpos}
-        value[$numArgs]=${1:$(( $eqpos + 1 ))}
+        if [ "${1:0:2}" != "--" ]; then
+          arg[$numArgs]=${1:1:$(( eqpos -1 ))}
+          value[$numArgs]=${1:$(( $eqpos + 1 ))}
+        else
+          arg[$numArgs]=${1:2:$(( eqpos -2 ))}
+          value[$numArgs]=${1:$(( $eqpos + 1 ))}
+        fi
+        shift 1
+      elif [ ${1:0:2} != "--" ]; then
+        grouplen=$(( ${#1} -1 ))
+        for i in $(seq 1 $grouplen);
+        do
+          arg[$numArgs]=${1:$i:1}
+          numArgs=$(( $numArgs + 1 ))
+        done
+        numArgs=$(( $numArgs - 1 ))
+        if [ "${2:0:1}" != "-" ] && [ "$2" != "" ]; then
+          value[$numArgs]=$2
+          shift 1
+        fi
         shift 1
       elif [ "${2:0:1}" != "-" ] && [ "$2" != "" ]; then
-        arg[$numArgs]=$1
+        arg[$numArgs]=${1:2}
         value[$numArgs]=$2
         shift 2
       else
-        arg[$numArgs]=$1
+        arg[$numArgs]=${1:2}
         shift 1
       fi
     else
       echo Unrecognised parameter $1
+      numArgs=$(( $numArgs - 1 ))
       shift 1
     fi
     numArgs=$(( $numArgs + 1 ))
@@ -57,8 +75,19 @@ Specify a parameter value:
   --parameter "Long string"
   --parameter="Long string"
 
+Specify multiple arguments:
+  -abc
+    is the same as -a -b -c
+  -abc 5
+    is the same as -a -b -c 5
+    or -a -b -c=5
+  Note:
+  -abc=5
+    is not the same and is interpreted as " parameter 'abc' has vale '5' "
+
 Note:
-  A parameter value starting with "-" must use the '-p=value' format, quoted as needed
+  A parameter *value* starting with "-" must use the '-p=value' format,
+  quoted as needed. E.g.  -d=-4 not -d -4
 
 EOF
 }
