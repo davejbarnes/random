@@ -1,8 +1,17 @@
 #!/bin/bash
 parseArgs(){
-  numArgs=1
-  arg[0]='Arguments'
-  value[0]='Values'
+  # sets 4 variables:
+  numArgs=1              # the total number of arguments
+  arg[0]='Arguments'     # an array of arguments with index matching value[]
+  value[0]='Values'      # an array of values with index matching arg[]
+  errors=0               # count of errors detected
+  # uses
+  allowedArgs=('a' 'b' 'help' 'x')      # Array of allowed arguments
+  allowAllArgs=0                        # Allow all arguments and ignore $allowedArgs
+                                        # export ARGS2ARR_ALL=1
+                                        # to set on a user basis :
+  if [ "$ARGS2ARR_ALL" == "1" ]; then allowAllArgs=1; fi
+
   while [ "$1" != "" ]; do
     if [ "${1:0:1}" == "-" ]; then
       pos="${1%%=*}"
@@ -40,11 +49,31 @@ parseArgs(){
     else
       echo Unrecognised parameter $1
       numArgs=$(( $numArgs - 1 ))
+      errors=$(( $errors + 1 ))
       shift 1
     fi
     numArgs=$(( $numArgs + 1 ))
   done
   numArgs=$(( $numArgs - 1 ))
+
+  # Check whether the provided arguments are in $allowedArgs
+  if [ $allowAllArgs -ne 1 ]; then
+    for i in $(echo ${arg[@]})
+    do
+      allowed=0
+      if [ "$i" == "Arguments" ]; then allowed=1; fi
+      for j in $(seq 0 ${#allowedArgs[@]})
+      do
+        if [ "$i" == "${allowedArgs[$j]}" ]; then
+          allowed=1
+        fi
+      done
+      if [ $allowed -eq 0 ]; then
+        echo Invalid parameter \'$i\'
+        errors=$(( $errors + 1 ))
+      fi
+    done
+  fi
 }
 
 help(){
@@ -98,6 +127,10 @@ if [ "$1" == "--help" ]; then
 fi
 
 parseArgs "$@"
+if [ $errors -gt 0 ]; then
+  echo $errors errors found
+  exit $errors
+fi
 for i in $(seq 1 $numArgs); do
   [[ ${value[$i]} != '' ]] && val=${value[$i]} || val='None_found'
   echo Arg ${arg[$i]}, value $val
