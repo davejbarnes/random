@@ -7,7 +7,7 @@ This repo has some of the scripts that I write.  I share them for anyone to:
 
 ### So far...
 #### args2arr (demo)
-This is "args to array" in Bash - it parses command line arguments and provides 2 index matched arrays of all the arguments and all the values (if specified).  If you want to use it you just need the function 'parseArgs', the rest is just for demo or testing.
+This is "args to array" in Bash - it parses command line arguments and provides 2 index matched arrays of all the arguments and all the values (if specified).  It can also check if provided arguments are 'allowed'. If you want to use it you just need the function 'parseArgs' with the 'allowedArgs' and 'allowAllArgs' variables set appropriately, the rest is just for demo or testing.
 
 *Eample*
 ```
@@ -30,6 +30,34 @@ Arg d, value 1
 Arg t, value 2
 Arg last, value test
 ```
+Note: If an argument is more than a single character it must be preceeded with '--'. For example '--help' is a single argument, but '-help' is the same as '-h -e -l -p'
+
+
+Edit the variables in the function to set the acceptable arguments or override checking. For example, with checking enabled and "('a' 'b' 'x' 'help')" set as acceptable arguments:
+```
+└─ᗒ ./args2arr -ab -x=3 --help 
+Arg a, value None_found
+Arg b, value None_found
+Arg x, value 3
+Arg help, value None_found
+
+└─ᗒ ./args2arr -ab -x=3 --help -s
+Invalid parameter 's'
+1 errors found
+```
+
+Disable checking by scripts by exporting ARGS2ARR_ALL=1 :
+```
+└─ᗒ export ARGS2ARR_ALL=1
+
+└─ᗒ ./args2arr -ab -x=3 --help -s
+Arg a, value None_found
+Arg b, value None_found
+Arg x, value 3
+Arg help, value None_found
+Arg s, value None_found
+```
+
 
 #### djargs
 This is a Python 3 module which does all the heavy lifting for processing and validating command line arguments.  It uses a configuration file to define the allowed arguments and rules to apply to them.
