@@ -90,7 +90,7 @@ This is a Python 3 module which does all the heavy lifting for processing and va
 I use it in my project 'pyngctl' (which is also why I started writing it) which is a command line tool for interacting with Nagios and CheckMK. **Note** I know there's a standard module for Python for *arg*ument *pars*ing ;). There's a **readme.md** in my pyngctl repo, but if you're familiar with Python it hopefully makes sense when you read the code.
 
 #### gd_dns
-This is for updating a DNS record with GoDaddy with the current WAN IP of your router.  You'll need to get an IP key and password to use it.  It's meant to run as a cron job so if your public IP changes your DNS record is updated with the new IP.
+This is for updating a DNS record with GoDaddy with the current WAN IP of your router.  You'll need to get an API key and password to use it.  It's meant to run as a cron job so if your public IP changes your DNS record is updated with the new IP.
 There's a seperate config file which has the API key and password so that access to that can be restricted via permissions if needed.
 
 #### djtable
