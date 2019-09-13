@@ -176,6 +176,17 @@ e2d is 'epoch to date'; it's for converting Unix timestamps in log files or such
 2009-01-19 05:42:47,some log line with valid date,user 5,2
 1232343,some log line with invalid date,user,2
 ```
+You may specify some options: 
+```
+| e2d ^    # Only match dates at beginning of the line
+| e2d $    # Only match dates at end of the line
+```
+or
+```
+| e2d 1    # Only match 1st date found per line
+| e2d 2 7  # Only match 2nd and 7th dates found per line
+```
+
 
 #### wsv.py
 wsv.py is "what seperated values". It tries to work out what the delimiter is in cvs type file when it's not known. It takes input from STDIN, and has a minimum and maximum number of lines to look at to come up with an answer, or not.
