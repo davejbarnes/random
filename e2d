@@ -1,15 +1,42 @@
 #!/usr/bin/python3
 
-import fileinput, re
+import fileinput, re, sys
 from datetime import datetime
 
+specific=[]
 epoch_regex = "(?:\b|\D|^)([0-9]{10})(?:\b|\D| |$)"
+if len(sys.argv) > 0:
+    fail=0
+    for index, switch in enumerate(sys.argv):
+        if index == 0:
+            continue
+        if switch == "^":
+            epoch_regex = "^([0-9]{10})"
+            continue
+        if switch == "$":
+            epoch_regex = "([0-9]{10})$"
+            continue
+        try:
+            if isinstance(int(switch), int):
+                specific.append(int(switch) - 1)
+                continue
+        except:
+            fail=1
+            print("Unrecognised parameter", switch)
+
+    if fail == 1:
+        exit(1)
+
 with fileinput.input('-') as lines:
     for line in lines:
         pattern = re.compile(epoch_regex)
         pattern_match = pattern.findall(line)
         if len(pattern_match) > 0:
-            for epochstr in pattern_match:
+            for index, epochstr in enumerate(pattern_match):
                 datetime = datetime.fromtimestamp(float(epochstr))
-                line = line.replace(epochstr, str(datetime))
+                if len(specific) == 0:
+                    line = line.replace(epochstr, str(datetime))
+                else:
+                    if index in specific:
+                        line = line.replace(epochstr, str(datetime))
         print(line, end = '')
