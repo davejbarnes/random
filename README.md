@@ -186,7 +186,7 @@ or
 | e2d 1    # Only match 1st date found per line
 | e2d 2 7  # Only match 2nd and 7th dates found per line
 ```
-
+Anything after ^ or $ is ignored. If numbers are specified all parameters must be numbers.
 
 #### wsv.py
 wsv.py is "what seperated values". It tries to work out what the delimiter is in cvs type file when it's not known. It takes input from STDIN, and has a minimum and maximum number of lines to look at to come up with an answer, or not.
