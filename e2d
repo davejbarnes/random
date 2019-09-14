@@ -7,18 +7,20 @@ specific=[]
 epoch_regex = "(?:\b|\D|^)([0-9]{10})(?:\b|\D| |$)"
 if len(sys.argv) > 0:
     fail=0
+    usingInt = 0
     for index, switch in enumerate(sys.argv):
         if index == 0:
             continue
-        if switch == "^":
-            epoch_regex = "^([0-9]{10})"
-            continue
-        if switch == "$":
-            epoch_regex = "([0-9]{10})$"
-            continue
+        if switch == "^" and usingInt == 0:
+            epoch_regex = "^([0-9]{10})(?:\b|\D| )"
+            break
+        if switch == "$" and usingInt == 0:
+            epoch_regex = "(?:\b|\D)([0-9]{10})$"
+            break
         try:
             if isinstance(int(switch), int):
                 specific.append(int(switch) - 1)
+                usingInt = 1
                 continue
         except:
             fail=1
