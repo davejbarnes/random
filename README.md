@@ -160,6 +160,17 @@ It works with Python 2, so it could probably be better (my original version was 
 #### e2d
 e2d is 'epoch to date'; it's for converting Unix timestamps in log files or such and displaying them as a date and time string. It takes input from STDIN and any 10 digit integer gets replaced with a date and time string, and outputs the result of each line to STDOUT.
 
+
+You may specify some options: 
+```
+^          Only match dates at beginning of the line
+$          Only match dates at end of the line
+n          Where n is 1 or more integers. Only match nth date found per line
+           Multiple numbers can be specified
+-f format  Specify a datetime format such as %Y-%m-%d
+```
+^, $ and n are exclusive, but -f (or just f) works with all
+
 *Example*
 ```
 └─ᗒ cat testdata.log 
@@ -175,18 +186,14 @@ e2d is 'epoch to date'; it's for converting Unix timestamps in log files or such
 12323437677,some other with invalid date; log lines,user,2
 2009-01-19 05:42:47,some log line with valid date,user 5,2
 1232343,some log line with invalid date,user,2
+
+└─ᗒ cat testdata.log | e2d -f %Y-%m-%d
+2009-01-19,some log line with valid date,user 1,2
+2009-01-19,some other line with valid date,user 2,2
+12323437677,some other with invalid date; log lines,user,2
+2009-01-19,some log line with valid date,user 5,2
+1232343,some log line with invalid date,user,2
 ```
-You may specify some options: 
-```
-| e2d ^    # Only match dates at beginning of the line
-| e2d $    # Only match dates at end of the line
-```
-or
-```
-| e2d 1    # Only match 1st date found per line
-| e2d 2 7  # Only match 2nd and 7th dates found per line
-```
-Anything after ^ or $ is ignored. If numbers are specified all parameters must be numbers.
 
 #### wsv.py
 wsv.py is "what seperated values". It tries to work out what the delimiter is in cvs type file when it's not known. It takes input from STDIN, and has a minimum and maximum number of lines to look at to come up with an answer, or not.
