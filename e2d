@@ -3,13 +3,17 @@
 import fileinput, re, sys
 from datetime import datetime
 
+format="%Y-%m-%d %H:%M:%S"
 specific=[]
 epoch_regex = "(?:\b|\D|^)([0-9]{10})(?:\b|\D| |$)"
+
 if len(sys.argv) > 0:
     fail=0
+    skip = 0
     usingInt = 0
     for index, switch in enumerate(sys.argv):
-        if index == 0:
+        if index == 0 or skip == 1:
+            skip = 0
             continue
         if switch == "^" and usingInt == 0:
             epoch_regex = "^([0-9]{10})(?:\b|\D| )"
@@ -17,6 +21,18 @@ if len(sys.argv) > 0:
         if switch == "$" and usingInt == 0:
             epoch_regex = "(?:\b|\D)([0-9]{10})$"
             break
+        if switch[0:1] == "f" or switch[0:2] == "-f":
+            f_value = sys.argv[index + 1]
+            try:
+                # not sure this try is needed
+                datetime = datetime.now()
+                t = datetime.strftime(f_value)
+                format = f_value
+                skip = 1
+            except:
+                print("Invalid dateime format string")
+                exit(2)
+            continue
         try:
             if isinstance(int(switch), int):
                 specific.append(int(switch) - 1)
@@ -37,8 +53,8 @@ with fileinput.input('-') as lines:
             for index, epochstr in enumerate(pattern_match):
                 datetime = datetime.fromtimestamp(float(epochstr))
                 if len(specific) == 0:
-                    line = line.replace(epochstr, str(datetime))
+                    line = line.replace(epochstr, datetime.strftime(format))
                 else:
                     if index in specific:
-                        line = line.replace(epochstr, str(datetime))
+                        line = line.replace(epochstr, datetime.strftime(format))
         print(line, end = '')
