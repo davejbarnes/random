@@ -204,7 +204,33 @@ This is a work in progress, and will only work where the input data has a consis
 ,
 ```
 
+#### class_dashboard.py
+This is my first attempt to display arbitrary "text lines" in "panes" which have a "title" as a "dashboard" in a terminal.  Very basic right now.
 
+```
+import class_dasyboard.py as dash
+my_dash = dash(dash_title='Main Dashboard", cols = 3, width = 50) # width is optional
+```
 
+It exposes 3 methods:
+* my_dash.create_pane(title) - adds a pane to a dashboard
+* my_dash.append_pane_text(title, text) - adds a text line to a defined pane
+* my_dash.display_dashboard(fit_width = bool) - displays the dashboard - if fit_width is True (default false), ignore dashboard's width property
+
+It prouces something like this:
+```
+Dashboard -  Dashboard-2
+    ╭────────╮                                        ╭────────╮                                    
+╭───╯ Pane-0 ╰───────────────────────────────────╮╭───╯ Pane-1 ╰───────────────────────────────────╮
+│                                                ││                                                │
+│ This is line 0 in pane 0 in dashboard 2        ││ This is line 0 in pane 1 in dashboard 2        │
+│ This is line 1 in pane 0 in dashboard 2        ││ This is line 1 in pane 1 in dashboard 2        │
+│ This is line 2 in pane 0 in dashboard 2        ││ This is line 2 in pane 1 in dashboard 2        │
+│ This is line 3 in pane 0 in dashboard 2        ││ This is line 3 in pane 1 in dashboard 2        │
+│ This is line 4 in pane 0 in dashboard 2        ││                                                │
+│ This is line 5 in pane 0 in dashboard 2        │╰────────────────────────────────────────────────╯
+│                                                │                                                  
+╰────────────────────────────────────────────────╯
+```
 
 *to be continued*
