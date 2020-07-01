@@ -1,15 +1,18 @@
 #!/bin/bash
+
 parseArgs(){
   # sets 4 variables:
   numArgs=1              # the total number of arguments
   arg[0]='Arguments'     # an array of arguments with index matching value[]
   value[0]='Values'      # an array of values with index matching arg[]
-  errors=0               # count of errors detected
+  errCount=0             # count of errors detected
+  errMsgs=""             # \n seperated list of errors
+
   # uses
-  allowedArgs=('a' 'b' 'help' 'x')      # Array of allowed arguments
+  allowedArgs=(a b help x h e l p)      # Array of allowed arguments
   allowAllArgs=0                        # Allow all arguments and ignore $allowedArgs
-                                        # export ARGS2ARR_ALL=1
-                                        # to set on a user basis :
+                                        # doesn't sound a good idea, but there you go
+                                        # export ARGS2ARR_ALL=1 to set on a user basis
   if [ "$ARGS2ARR_ALL" == "1" ]; then allowAllArgs=1; fi
 
   while [ "$1" != "" ]; do
@@ -47,9 +50,9 @@ parseArgs(){
         shift 1
       fi
     else
-      echo Unrecognised parameter $1
+      errMsgs=$errMsgs"Unrecognised parameter $1\n"
       numArgs=$(( $numArgs - 1 ))
-      errors=$(( $errors + 1 ))
+      errCount=$(( $errCount + 1 ))
       shift 1
     fi
     numArgs=$(( $numArgs + 1 ))
@@ -69,10 +72,18 @@ parseArgs(){
         fi
       done
       if [ $allowed -eq 0 ]; then
-        echo Invalid parameter \'$i\'
-        errors=$(( $errors + 1 ))
+        if [ ${#i} -lt 2 ]; then
+          errMsgs=$errMsgs"Invalid parameter '-$i'\n"
+        else
+          errMsgs=$errMsgs"Invalid parameter '--$i'\n"
+        fi
+        errCount=$(( $errCount + 1 ))
       fi
     done
+  fi
+
+  if [ $errCount -gt 0 ]; then
+    errMsgs=${errMsgs::-2}
   fi
 }
 
@@ -83,9 +94,15 @@ args2arr example
 ----------------
 
 Converts command line options to 2 'linked' arrays of parameter name
-and the value (if any) specified.  This demo outputs the parameters
-and their values if present. The execption is if you specify the first
-parameter as "--help" which displays this help.
+and the value (if any) specified.  Errors are stored as a count and
+and as messages; deal with them as you will.
+
+This example shows how to 
+ * simply deal with errors
+ * create an associative array
+ * list  'allowed parameters' found using the associative array
+ * check for a single and only parameter
+
 
 Use
 ---
@@ -101,8 +118,10 @@ Specify a parameter value:
   -p="Long string"
   --parameter 3
   --parameter=3
+  -parameter=3
   --parameter "Long string"
   --parameter="Long string"
+  -parameter="Long string"
 
 Specify multiple arguments:
   -abc
@@ -121,17 +140,51 @@ Note:
 EOF
 }
 
-if [ "$1" == "--help" ]; then
-  help
-  exit 0
+# Call the main function to parse all command line arguments
+parseArgs "$@"
+
+# Check if any errors were found
+# the function itself won't output anything or exit
+if [ $errCount -gt 0 ]; then
+  echo $errCount errors found
+  echo -e $errMsgs
+  exit $errCount
 fi
 
-parseArgs "$@"
-if [ $errors -gt 0 ]; then
-  echo $errors errors found
-  exit $errors
-fi
+# Combine the 2 arrays into an associative array
+# Note: can't be done in the function as 'declare' is needed
+# and makes the array local to the function
+declare -A argArr
 for i in $(seq 1 $numArgs); do
-  [[ ${value[$i]} != '' ]] && val=${value[$i]} || val='None_found'
-  echo Arg ${arg[$i]}, value $val
+  argArr[${arg[$i]}]=${value[$i]}
 done
+
+##########################
+# And you're good to go! #
+##########################
+
+
+
+###########
+# Examples
+
+# Report which of the allowed variables are found
+for p in ${allowedArgs[@]}; do
+  if [ ${argArr[$p]+_} ];then
+    if [ "${argArr[$p]}" != "" ]; then
+      echo "parameter -$p was found with value ${argArr[$p]}"
+    else
+      echo "parameter -$p was found";fi
+    fi
+done
+
+# Display help if --help was provided as first and only parameter
+if [ ${argArr[help]+_} ]; then
+  if [ "${arg[1]}" == "help" ] && [ ${#@} -eq 1 ]; then
+    help
+    exit 0
+  else
+    echo "Help on what?  --help must be first and only parameter"
+    exit 1
+  fi
+fi
