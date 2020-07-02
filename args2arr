@@ -174,8 +174,9 @@ for p in ${allowedArgs[@]}; do
     if [ "${argArr[$p]}" != "" ]; then
       echo "parameter -$p was found with value ${argArr[$p]}"
     else
-      echo "parameter -$p was found";fi
+      echo "parameter -$p was found";
     fi
+  fi
 done
 
 # Display help if --help was provided as first and only parameter
