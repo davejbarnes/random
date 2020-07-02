@@ -74,7 +74,7 @@ This is a Python 3 module which does all the heavy lifting for processing and va
 #   required : bool, whether the parameter is required. optional (default False)
 #   required_unless : list, negate requirement if *one or more* other parameters are specified (implies 'required = true'), optional
 #   depends : list, parameters which must *all* also be specified with this one, optional
-#   exclusive_of : lits, parameters *any* of which must not also be specified, optional
+#   exclusive_of : list, parameters *any* of which must not also be specified, optional
 #   help : string, text used in extended help REQUIRED
 #   rules : list of strings, each of which will be evaluated as ("parameter value" rule), optional. See below.
 
