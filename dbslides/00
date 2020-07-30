@@ -1,0 +1,26 @@
+
+
+        %Fb%%Fu%dbslides%RF%
+
+        %fb%Slides file must be named 01 up to 99
+        00 is only shown once (this slide)
+
+        %fg%. or >      %fb%next slide
+        %fg%, or <      %fb%previous slide
+
+        %fg%r           %fb%reload current slide
+
+        %fg%f           %fb%go to first slide
+        %fg%l           %fb%go to last slide
+
+        %fg%gx<enter>   %fb%go to slide x (no leading 0)
+
+        %fg%q           %fb%quit
+
+
+
+
+        %fy%This slide is only shown once
+
+        %Fb%Press 'next slide' to start
+    

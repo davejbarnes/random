@@ -1,0 +1,25 @@
+
+
+        %Fb%%Fu%dbslides%RF%
+
+        %fb%Slides are text files with formatting codes added%RF%
+
+        %fg%%Fb%✱%RF% codes are surronded by % characters
+            - e.g.  % \bfg \b% sets the foreground to green
+
+        %fg%%Fb%✱%RF% codes persist until they are reset
+            - new lines will have the same formatting as previous lines
+              unless a reset code is used
+
+        %fg%%Fb%✱%RF% Codes are:
+
+            % \bfr \b%   %fr%Foreground red%RF%
+            % \bfg \b%   %fg%Foreground green%RF%
+            % \bfy \b%   %fy%Foreground yellow%RF%
+            % \bfb \b%   %fb%Foreground blue%RF%
+            % \bfp \b%   %fp%Foreground purple%RF%
+            % \bfgy \b%  %fgy%Foreground grey%RF%
+            % \bflg \b%  %flg%Foreground light grey%RF%
+
+
+cont...
