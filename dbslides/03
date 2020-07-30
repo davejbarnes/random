@@ -1,0 +1,25 @@
+
+
+        %Fb%%Fu%dbslides%RF%
+
+        %fg%%Fb%✱ Other notes%RF%
+
+          %fb%- escape codes are honored, such as \\n \\b \\t
+          - each slide %Fu%must%RF%%fb% end with a new line
+
+        %fg%%Fb%✱ This was%RF%
+
+          %fb%- mostly an exercise using Bash regex rather than using sed
+          - partly trying to avoid using Powerpoint
+          - in no small part due to boredom in 2020
+
+
+
+
+
+
+
+
+
+
+

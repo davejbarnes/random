@@ -1,0 +1,104 @@
+#!/bin/bash
+
+declare -A formatting
+    # Foreground colours
+formatting["%fr%"]="\e[31m"
+formatting["%fg%"]="\e[32m"
+formatting["%fy%"]="\e[33m"
+formatting["%fb%"]="\e[36m"
+formatting["%fp%"]="\e[95m"
+formatting["%fgy%"]="\e[90m"
+formatting["%flg%"]="\e[37m"
+    # Background colours
+formatting["%br%"]="\e[41m"
+formatting["%bg%"]="\e[42m"
+formatting["%by%"]="\e[43m"
+formatting["%bb%"]="\e[46m"
+formatting["%bp%"]="\e[105m"
+formatting["%bgy%"]="\e[100m"
+    # Other formatting
+formatting["%Fb%"]="\e[1m"
+formatting["%Fr%"]="\e[7m"
+formatting["%Fu%"]="\e[4m"
+    # Console resets
+formatting["%Rf%"]="\e[39m"
+formatting["%Rb%"]="\e[49m"
+formatting["%RF%"]="\e[0m"
+
+displayFile(){
+    clear
+    echo -e "\e[90m[$current\\$max]\e[39m"
+    IFS=
+    while read -r "line"
+    do
+        for key in ${!formatting[@]}
+        do
+            re="(.*)$key(.*)"
+            replaced=1 # force at least 1 execution
+            while [ $replaced -eq 1 ];
+            do
+                if [[ $line =~ $re ]]; then
+                    line=${BASH_REMATCH[1]}${formatting[$key]}${BASH_REMATCH[2]}
+                    replaced=1
+                else
+                    replaced=0
+                fi
+            done
+        done
+        echo -e "$line"
+    done <$1
+    echo -e "\e[0m"
+}
+
+current=0
+line=$(ls ??)
+for i in $line;do true;done
+max=$(( $i + 0 ))
+
+if [ -f 00 ]; then
+    displayFile 00
+else
+    current=1
+    displayFile 01
+fi
+
+while [ 1 -eq 1 ]
+do
+    reload=0
+    read -sn1
+    if [ "$REPLY" = "," ] || [ "$REPLY" = "<" ];then
+        if [ $current -gt 1 ]; then
+            current=$(( current - 1 ))
+            reload=1
+        fi
+    elif [ "$REPLY" = "." ] || [ "$REPLY" = ">" ]; then
+        if [ $current -lt $max ]; then
+            current=$(( current + 1 ))
+            reload=1
+        fi
+    elif [ "$REPLY" = "g" ]; then
+        read -s slide
+        if [ -f $slide ] || [ -f 0$slide ]; then
+            current=$slide
+            reload=1
+        else
+            echo -e "\e[90mSlide $slide not found\e[0m"
+            sleep 0.5
+        fi
+    elif [ "$REPLY" = "f" ]; then
+        current=1
+        reload=1
+    elif [ "$REPLY" = "l" ]; then
+        current=$max
+        reload=1
+    elif [ "$REPLY" = "r" ]; then
+        reload=1
+    elif [ "$REPLY" = "q" ]; then
+        clear
+        exit 0
+    fi
+    [ $current -lt 10 ] && file=0$current || file=$current
+    if [ $reload -eq 1 ]; then
+        displayFile $file
+    fi
+done
