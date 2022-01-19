@@ -59,6 +59,22 @@ Arg s, value None_found
 ```
 
 
+#### debug-example.sh
+This is a working example of how to log debug output from a Bash script that also shows the "call path" of the debug message
+For exmaple, if you have multiple functions defined in your Bash script, calling the "out" function with a String will output
+the String prepended with the function(s) which led to it's invocation.
+
+Run it with either:
+```
+  debug-example.sh
+```
+for minimal logging, or
+```
+  debug-exmaple.sh 2 
+```
+for full output
+
+
 #### djargs
 This is a Python 3 module which does all the heavy lifting for processing and validating command line arguments.  It uses a configuration file to define the allowed arguments and rules to apply to them.
 
