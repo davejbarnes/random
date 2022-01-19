@@ -74,6 +74,26 @@ for minimal logging, or
 ```
 for full output
 
+Example:
+```
+user $ ~/debug  
+    └─ᗒ ./debug-example.sh 2
+[main] Starting main
+[main > function1] Starting 'function1'
+[main > function1] I need help with something
+[main > function1 > helperFunction] Starting helperFunction
+[main > function1 > helperFunction] I'm doing something!
+[main > function1 > helperFunction] Finished helperFunction
+[main > function1] Finished 'function1'
+[main] Finished
+
+user $ ~/debug  
+    └─ᗒ ./debug-example.sh
+[main] Starting main
+[main > function1] I need help with something
+[main > function1 > helperFunction] I'm doing something!
+[main] Finished
+```
 
 #### djargs
 This is a Python 3 module which does all the heavy lifting for processing and validating command line arguments.  It uses a configuration file to define the allowed arguments and rules to apply to them.
