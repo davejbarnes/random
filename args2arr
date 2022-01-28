@@ -9,48 +9,63 @@ parseArgs(){
   errMsgs=""             # \n seperated list of errors
 
   # uses
-  allowedArgs=(a b help x h e l p)      # Array of allowed arguments
-  allowAllArgs=0                        # Allow all arguments and ignore $allowedArgs
+  allowedArgs=(a b c help debug version x h e l p)      # Array of allowed arguments
+  allowAllArgs=1                        # Allow all arguments and ignore $allowedArgs
                                         # doesn't sound a good idea, but there you go
                                         # export ARGS2ARR_ALL=1 to set on a user basis
   if [ "$ARGS2ARR_ALL" == "1" ]; then allowAllArgs=1; fi
 
+
   while [ "$1" != "" ]; do
-    if [ "${1:0:1}" == "-" ]; then
-      pos="${1%%=*}"
-      [[ "$pos" = "$1" ]] && eqpos=255 || eqpos="${#pos}"
+    currentArg=$1
+    nextArg=$2
+    split=0
+    if [ "${currentArg:0:1}" == "-" ] && [ "${currentArg:0:3}" != "---" ]; then
+      pos="${currentArg%%=*}"
+      [[ "$pos" = "$currentArg" ]] && eqpos=255 || eqpos="${#pos}"
       if [ $eqpos -ne 255 ]; then
-        if [ "${1:0:2}" != "--" ]; then
-          arg[$numArgs]=${1:1:$(( eqpos -1 ))}
-          value[$numArgs]=${1:$(( $eqpos + 1 ))}
-        else
-          arg[$numArgs]=${1:2:$(( eqpos -2 ))}
-          value[$numArgs]=${1:$(( $eqpos + 1 ))}
+        if [ "${currentArg:0:2}" != "--" ]; then
+          split=1
+          unaltered=$currentArg
+          currentArg=${currentArg/=/ }
+          currentArg=${currentArg:0:-2}
+          currentArg=${currentArg/ /}
+          nextArg=${unaltered:$(( eqpos + 1 ))}
+        elif [ "${currentArg:0:2}" == "--" ]; then
+          split=1
+          unaltered=$currentArg
+          currentArg=${currentArg/=/ }
+          currentArg=${currentArg:0:-2}
+          currentArg=${currentArg/ /}
+          nextArg=${unaltered:$(( $eqpos + 1 ))}
         fi
-        shift 1
-      elif [ ${1:0:2} != "--" ]; then
-        grouplen=$(( ${#1} -1 ))
+      fi
+      if [ ${currentArg:0:2} != "--" ]; then
+        grouplen=$(( ${#currentArg} -1 ))
         for i in $(seq 1 $grouplen);
         do
-          arg[$numArgs]=${1:$i:1}
+          arg[$numArgs]=${currentArg:$i:1}
           numArgs=$(( $numArgs + 1 ))
         done
         numArgs=$(( $numArgs - 1 ))
-        if [ "${2:0:1}" != "-" ] && [ "$2" != "" ]; then
-          value[$numArgs]=$2
-          shift 1
+        if [ "${nextArg:0:1}" != "-" ]  && [ "$nextArg" != "" ] || [ $split -eq 1 ]; then
+          value[$numArgs]=$nextArg
+          if [ $eqpos -eq 255 ]; then shift 1; fi
         fi
         shift 1
-      elif [ "${2:0:1}" != "-" ] && [ "$2" != "" ]; then
-        arg[$numArgs]=${1:2}
-        value[$numArgs]=$2
-        shift 2
+      elif [ "${currentArg:0:2}" == "--" ] && [ "$nextArg" != "" ]; then
+        arg[$numArgs]=${currentArg:2}
+        if [[ "${nextArg:0:1}" != "-" || $split -eq 1 ]]; then
+          value[$numArgs]=$nextArg
+          shift 1
+        fi
+        if [ $eqpos -eq 255 ]; then shift 1; fi
       else
-        arg[$numArgs]=${1:2}
+        arg[$numArgs]=${currentArg:2}
         shift 1
       fi
     else
-      errMsgs=$errMsgs"Unrecognised parameter $1\n"
+      errMsgs=$errMsgs"Unrecognised parameter $currentArg\n"
       numArgs=$(( $numArgs - 1 ))
       errCount=$(( $errCount + 1 ))
       shift 1
@@ -151,11 +166,43 @@ if [ $errCount -gt 0 ]; then
   exit $errCount
 fi
 
+# Simple replacement for 'seq' to save forking a new shell
+# (better version in the same repo)
+seqq(){
+  if [ "$1" -a "$2" ]; then
+    if [[ $1 =~ ^[0-9]+$ ]]; then
+      seqStart=$1
+    else
+      return 255
+    fi
+    if [[ $2 =~ ^[0-9]+$ ]]; then
+      seqEnd=$2
+    else
+      return 255
+    fi
+    if [[ "$3" =~ ^[0-9]+$ ]]; then
+      increment=$3
+    else
+      increment=1
+    fi
+    currentNum=$seqStart
+    result=$currentNum
+    while [ $currentNum -lt $seqEnd ]; do
+      currentNum=$(( currentNum + increment ))
+      result="$result $currentNum"
+    done
+    echo $result
+    return 0
+  else
+    return 255
+  fi
+}
+
 # Combine the 2 arrays into an associative array
 # Note: can't be done in the function as 'declare' is needed
 # and makes the array local to the function
 declare -A argArr
-for i in $(seq 1 $numArgs); do
+for i in $(seqq 1 $numArgs); do
   argArr[${arg[$i]}]=${value[$i]}
 done
 
@@ -164,28 +211,30 @@ done
 ##########################
 
 
-
 ###########
 # Examples
 
 # Report which of the allowed variables are found
-for p in ${allowedArgs[@]}; do
+echo -e '--------------------------------------------------------'
+for p in ${!argArr[@]}; do
+  if [ ${#p} -gt 1 ]; then dash='--'; else dash='-';fi
   if [ ${argArr[$p]+_} ];then
     if [ "${argArr[$p]}" != "" ]; then
-      echo "parameter -$p was found with value ${argArr[$p]}"
+      echo "parameter $dash$p was found with value ${argArr[$p]}"
     else
-      echo "parameter -$p was found";
+      echo "parameter $dash$p was found";
     fi
   fi
 done
+echo -e '--------------------------------------------------------'
 
-# Display help if --help was provided as first and only parameter
+#Display help if --help was provided as first and only parameter
 if [ ${argArr[help]+_} ]; then
   if [ "${arg[1]}" == "help" ] && [ ${#@} -eq 1 ]; then
     help
     exit 0
   else
-    echo "Help on what?  --help must be first and only parameter"
+    echo "--help must be first and only parameter"
     exit 1
   fi
 fi
