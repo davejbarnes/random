@@ -32,6 +32,7 @@ Arg last, value test
 ```
 Note: If an argument is more than a single character it must be preceeded with '--'. For example '--help' is a single argument, but '-help' is the same as '-h -e -l -p'
 
+Note: If a value begins with "-", such as a minus number, then the = form must be used
 
 Edit the variables in the function to set the acceptable arguments or override checking. For example, with checking enabled and "('a' 'b' 'x' 'help')" set as acceptable arguments:
 ```
