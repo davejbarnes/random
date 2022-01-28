@@ -214,7 +214,7 @@ done
 ###########
 # Examples
 
-# Report which of the allowed variables are found
+# Report what parameters and values where found
 echo -e '--------------------------------------------------------'
 for p in ${!argArr[@]}; do
   if [ ${#p} -gt 1 ]; then dash='--'; else dash='-';fi
