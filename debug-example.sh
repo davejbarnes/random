@@ -51,7 +51,8 @@ out (){
           newFn=$newFn"${fn[$f]} "
         done
         fn=${newFn:1:-1}
-        printf "$bg_grey$fg_black[${fn// / > }]$fbg_reset$bg_grey";echo -e "${@/debug/}$fbg_reset"
+        msg=$@
+        printf "$bg_grey$fg_black[${fn// / > }]$fbg_reset$bg_grey";echo -e "${msg/debug/}$fbg_reset"
         return 0
       fi
       ;;
@@ -64,7 +65,8 @@ out (){
           newFn=$newFn"${fn[$f]} "
         done
         fn=${newFn:1:-1}
-        printf "$bg_yellow$fg_black[${fn// / > }]$fbg_reset$fg_bold$bg_grey";echo -e "${@/DEBUG/}$fbg_reset"
+        msg=$@
+        printf "$bg_yellow$fg_black[${fn// / > }]$fbg_reset$fg_bold$bg_grey";echo -e "${msg/DEBUG/}$fbg_reset"
         return 0
       fi
       ;;
