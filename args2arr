@@ -161,8 +161,6 @@ EOF
 # Call the main function to parse all command line arguments
 parseArgs "$@"
 
-echo -e "arg:\n${arg[@]}"
-
 # Check if any errors were found
 # the function itself won't output anything or exit
 if [ $errCount -gt 0 ]; then
