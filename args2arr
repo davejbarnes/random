@@ -27,15 +27,18 @@ parseArgs(){
         if [ "${currentArg:0:2}" != "--" ]; then
           split=1
           unaltered=$currentArg
-          currentArg=${currentArg/=/ }
-          currentArg=${currentArg:0:-2}
-          currentArg=${currentArg/ /}
           nextArg=${unaltered:$(( eqpos + 1 ))}
+          trim=${#nextArg}
+          currentArg=${currentArg/=/ }
+          currentArg=${currentArg:0:-$(( trim + 1 ))}
+          currentArg=${currentArg/ /}
         elif [ "${currentArg:0:2}" == "--" ]; then
           split=1
           unaltered=$currentArg
+          nextArg=${unaltered:$(( eqpos + 1 ))}
+          trim=${#nextArg}
           currentArg=${currentArg/=/ }
-          currentArg=${currentArg:0:-2}
+          currentArg=${currentArg:0:-$(( trim + 1 ))}
           currentArg=${currentArg/ /}
           nextArg=${unaltered:$(( $eqpos + 1 ))}
         fi
@@ -201,6 +204,16 @@ seqq(){
 # Combine the 2 arrays into an associative array
 # Note: can't be done in the function as 'declare' is needed
 # and makes the array local to the function
+#
+# *** IMPORTANT ***
+#
+# This does NOT cater for duplicate parameters:
+#   -a=first -a=second
+# will result in a=second
+#
+# see https://github.com/davejbarnes/random/issues/7
+# for details of how to handle duplicates 
+#
 declare -A argArr
 for i in $(seqq 1 $numArgs); do
   argArr[${arg[$i]}]=${value[$i]}
