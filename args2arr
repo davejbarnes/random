@@ -192,7 +192,9 @@ seqq(){
     result=$currentNum
     while [ $currentNum -lt $seqEnd ]; do
       currentNum=$(( currentNum + increment ))
-      result="$result $currentNum"
+      if [ $currentNum -lt $seqEnd ]; then
+        result="$result $currentNum"
+      fi
     done
     echo $result
     return 0
